@@ -7,25 +7,38 @@ import com.sofka.alphapostcomments.domain.values.Content;
 
 public class AddComment extends Command {
 
-    private CommentID commentID;
-    private Author author;
-    private Content content;
+    private String postID;
+    private String commentID;
+    private String author;
+    private String content;
 
-    public AddComment(CommentID commentID, Author author, Content content) {
+
+    public AddComment() {
+
+    }
+
+    public AddComment(String postID, String commentID, String author, String content) {
+        this.postID = postID;
         this.commentID = commentID;
         this.author = author;
         this.content = content;
     }
 
-    public CommentID getCommentID() {
+
+
+    public String getPostID() {
+        return postID;
+    }
+
+    public String getCommentID() {
         return commentID;
     }
 
-    public Author getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public Content getContent() {
+    public String getContent() {
         return content;
     }
 }

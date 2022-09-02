@@ -5,28 +5,38 @@ import com.sofka.alphapostcomments.domain.values.Author;
 import com.sofka.alphapostcomments.domain.values.CommentID;
 import com.sofka.alphapostcomments.domain.values.Content;
 
+import java.util.UUID;
+
 public class CommentAdded extends DomainEvent {
 
-    private CommentID commentID;
-    private Author author;
-    private Content content;
+    //TODO Change to string
 
-    public CommentAdded(CommentID commentID, Author author, Content content) {
+    private String commentID;
+    private String author;
+    private String content;
+
+    public CommentAdded(String commentID, String author, String content) {
         super("sofka.alphapostcomments.domain.CommentAdded");
         this.commentID = commentID;
         this.author = author;
         this.content = content;
     }
 
-    public CommentID getCommentID() {
+
+    public CommentAdded() {
+        super("sofka.alphapostcomments.domain.CommentAdded");
+    }
+
+
+    public String getCommentID() {
         return commentID;
     }
 
-    public Author getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public Content getContent() {
+    public String getContent() {
         return content;
     }
 }
