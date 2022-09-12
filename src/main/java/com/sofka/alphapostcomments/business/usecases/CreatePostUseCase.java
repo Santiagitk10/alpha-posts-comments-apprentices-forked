@@ -24,7 +24,6 @@ public class CreatePostUseCase {
         this.bus = bus;
     }
 
-    //TODO MISSING IMPLEMENTATION OF THE BUS, HAS TO DO WITH RABBIT
     public Flux<DomainEvent> apply(Mono<CreatePost> createPostMono){
         return createPostMono.flatMapIterable(createPostCommand -> {
             Post post = new Post(PostID.of(createPostCommand.getPostID()),new Title(createPostCommand.getTitle()), new Author(createPostCommand.getAuthor()));
