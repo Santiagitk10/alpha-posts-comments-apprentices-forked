@@ -23,15 +23,17 @@ public class AuthHandler {
                         .flatMap(user -> request.pathVariable("role").equals("admin")?
                                 createUserUseCase.save(user,"ROLE_ADMIN"):
                                 createUserUseCase.save(user,"ROLE_USER"))
-                        .flatMap(user -> ServerResponse.status(HttpStatus.CREATED).bodyValue(user)));
+                        .flatMap(user -> ServerResponse.status(HttpStatus.CREATED).bodyValue(user))
+                        .onErrorResume(err -> ServerResponse.badRequest().build())
+        );
 
     }
 
     @Bean
     RouterFunction<ServerResponse> loginRouter(LoginUseCase loginUseCase){
         return route(POST("/authlogin"),
-                request -> loginUseCase.logIn(request.bodyToMono(AuthenticationRequest.class)));
-/*                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.FORBIDDEN).build()));*/
+                request -> loginUseCase.logIn(request.bodyToMono(AuthenticationRequest.class))
+                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.FORBIDDEN).build()));
     }
 
 }

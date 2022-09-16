@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
 public class JwtProvider {
 
     private String secretKey = "this-is-my-secret-key-it-has-got-to-be-a-lot-longer";
-    private long tokenValidity = 360000;
+    private long tokenValidity = 3600000;
 
 }

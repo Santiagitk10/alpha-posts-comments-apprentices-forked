@@ -4,7 +4,6 @@ package com.sofka.alphapostcomments.application.generic.usecases;
 import com.sofka.alphapostcomments.application.config.jwt.JwtTokenProvider;
 import com.sofka.alphapostcomments.application.generic.models.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -27,15 +26,14 @@ public class LoginUseCase {
         return authenticationRequest
                 .flatMap(authRequest -> this.authenticationManager
                         .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(),authRequest.getPassword()))
-/*                        .onErrorMap(BadCredentialsException.class, err -> new Throwable(HttpStatus.FORBIDDEN.toString()))*/
+                        .onErrorMap(BadCredentialsException.class, err -> new Throwable(HttpStatus.FORBIDDEN.toString()))
                         .map(this.jwtTokenProvider::createToken))
                 .flatMap(jwt-> {
                     //HttpHeaders httpHeaders = new HttpHeaders();
                     //httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
-                    var tokenBody = Map.of("access_token", jwt);
+                    var tokenBody = Map.of("token", jwt);
                     return ServerResponse
                             .ok()
-                            .headers(httpHeaders1 -> httpHeaders1.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwt))
                             .bodyValue(tokenBody);
 
                 });
