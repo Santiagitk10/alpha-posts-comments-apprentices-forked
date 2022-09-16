@@ -4,6 +4,7 @@ import co.com.sofka.domain.generic.DomainEvent;
 import com.google.gson.Gson;
 import com.sofka.alphapostcomments.application.generic.models.StoredEvent;
 import com.sofka.alphapostcomments.business.gateways.DomainEventRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.Comparator;
 import java.util.Date;
 
+@Slf4j
 @Repository
 public class MongoEventStoreRepository implements DomainEventRepository {
 
@@ -42,6 +44,7 @@ public class MongoEventStoreRepository implements DomainEventRepository {
 
     @Override
     public Mono<DomainEvent> saveEvent(DomainEvent event) {
+        log.info("Saving Event");
         DocumentEventStored eventStored = new DocumentEventStored();
         eventStored.setAggregateRootId(event.aggregateRootId());
         eventStored.setStoredEvent(new StoredEvent(gson.toJson(event), new Date(), event.getClass().getCanonicalName()));
@@ -53,7 +56,8 @@ public class MongoEventStoreRepository implements DomainEventRepository {
                         e.printStackTrace();
                         throw new IllegalStateException("couldnt find domain event");
                     }
-                });
+                })
+                .doOnError(error -> log.error(String.valueOf(error)));
     }
 
 }
